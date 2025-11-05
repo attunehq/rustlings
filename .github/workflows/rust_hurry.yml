@@ -39,8 +39,12 @@ jobs:
         os: [ubuntu-latest, windows-latest, macos-latest]
     steps:
       - uses: actions/checkout@v4
-      - name: Install hurry
+      - name: Install hurry (Unix)
+        if: runner.os != 'Windows'
         run: curl -sSfL https://hurry-releases.s3.amazonaws.com/install.sh | bash
+      - name: Install hurry (Windows)
+        if: runner.os == 'Windows'
+        run: irm https://hurry-releases.s3.amazonaws.com/install.ps1 | iex
       - uses: swatinem/rust-cache@v2
       - name: cargo build
         run: hurry cargo build --workspace
